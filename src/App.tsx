@@ -1,9 +1,13 @@
 import React from 'react';
+import { StopList } from './Components/List/List';
+import 'semantic-ui-css/semantic.min.css'
 
 
-function App() {
+const App =() =>{
   return (
-    <h1>!</h1>
+    <>
+      <StopList key='list' />
+    </>
   );
 }
 
