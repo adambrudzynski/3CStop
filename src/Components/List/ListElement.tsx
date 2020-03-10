@@ -36,6 +36,7 @@ export const ListElement = ({ stop }: any) => {
 
     const handleClick = () => {
         setColapsed(!colapsed)
+        console.log(stop)
     }
 
     return <Fragment key={stop.stopId}>
@@ -43,11 +44,12 @@ export const ListElement = ({ stop }: any) => {
             {stop.stopId >= 30000
                 ? <>
                     <Label size='tiny' color='blue' content={'ZKM'} />
-                    {`Gdynia ${stop.stopDesc}`}
-                </>
+                    {stop.stopDesc}
+                    {stop.stopCode && <Label circular size='tiny' content={stop.stopCode} />}                </>
                 : <>
                     <Label size='tiny' color='red' content={'ZTM'} />
-                    {`${stop.zoneName} ${stop.stopName}`}
+                    {stop.stopDesc}
+                    {stop.stopCode && <Label circular size='tiny' content={stop.stopCode} />}
                 </>
             }
         </Accordion.Title>
