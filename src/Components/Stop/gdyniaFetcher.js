@@ -2,7 +2,8 @@ import axios from 'axios'
 
 export const fetchGdyniaStop = async (id) => {
     try {
-        const url=`https://zkmgdynia.pl/stopsAPI/getDisplay/${id}`;
+        const corsProxy = 'https://cors-anywhere.herokuapp.com/'
+        const url=`${corsProxy}https://zkmgdynia.pl/stopsAPI/getDisplay/${id}`;
         const { data } = await axios.get(url);
         return data.delay
     }
