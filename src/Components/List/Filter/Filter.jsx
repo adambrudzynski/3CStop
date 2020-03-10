@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input } from 'semantic-ui-react'
+import { Form } from 'semantic-ui-react'
 
 const Filter = ({search, name}) => {
 const handleChange = (event) =>{
@@ -17,8 +17,6 @@ const handleChange = (event) =>{
             />
         </Form.Group>
     </Form>
-
-
 }
 
 export { Filter }
