@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { List, Accordion } from 'semantic-ui-react'
+import React, { useState, useEffect, createRef } from 'react'
+import { Accordion, Container, Sticky } from 'semantic-ui-react'
 
 import { getDate } from '../../utils/getDate'
 import axios from 'axios'
@@ -18,6 +18,8 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
     useEffect(() => {
         fetchList()
     }, [])
+
+    const contextRef = createRef<HTMLDivElement>()
 
     const fetchList = async () => {
         try {
@@ -49,13 +51,14 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
 
     if (loading) { return <h1>loading</h1> }
     if (error) { return <h1>Error!</h1> }
-    return <>
-        <Filter search={handleSearch} name={search} />
-        <Accordion styled >
-            {list}
-        </Accordion>
-
-    </>
+    return <Container >
+        <div ref={contextRef}>
+            <Filter search={handleSearch} name={search} stickyContext={contextRef} />
+            <Accordion styled >
+                {list}
+            </Accordion>
+        </div>
+    </Container>
 }
 
 export { StopList }
