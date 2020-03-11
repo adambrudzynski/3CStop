@@ -14,12 +14,13 @@ const Filter = ({ search, name, stickyContext, operator, handleOperator }) => {
 
     const options = [
         { key: 'ztm', text: 'ZTM Gdańsk', value: 'ztm' },
-        { key: 'zkm', text: 'ZKM Gdynia', value: 'zkm' }
+        { key: 'zkm', text: 'ZKM Gdynia', value: 'zkm' },
+        { key: 'all', text: 'Wszyscy', value: 'all' }
     ]
 
     return <Sticky context={stickyContext}>
-        <Form >
-            <Form.Group >
+        <Form unstackable >
+            <Form.Group widths={2} >
                 <Form.Input
                     placeholder='Wyszukaj...'
                     name='search'
@@ -30,7 +31,6 @@ const Filter = ({ search, name, stickyContext, operator, handleOperator }) => {
                 />
                 <Form.Dropdown
                     placeholder='Przewoźnik'
-                    multiple
                     selection
                     options={options}
                     onChange={handleDropdownChange}

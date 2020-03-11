@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createRef } from 'react'
-import { Accordion, Container, Sticky } from 'semantic-ui-react'
+import { Accordion, Container, Dimmer, Loader } from 'semantic-ui-react'
 
 import { getDate } from '../../utils/getDate'
 import axios from 'axios'
@@ -14,7 +14,7 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<boolean | null>(null)
     const [search, setSearch] = useState<string>('')
-    const [operators, setOperators] = useState<Array<string>>([])
+    const [operators, setOperators] = useState<string>('all')
 
     useEffect(() => {
         fetchList()
@@ -40,15 +40,15 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
         setSearch(search)
     }
 
-    const handleOperator = (operator: Array<string>) => {
+    const handleOperator = (operator: string) => {
         setOperators(operator)
     }
 
     const list = stops
         .filter((stop: any) => {
-            if (operators.length === 0 || operators.length === 2 )return stop
-            if (operators.length === 1 && operators.includes('ztm') && stop.stopId < 30000 ) return stop
-            if (operators.length === 1 && operators.includes('zkm') && stop.stopId >= 30000) return stop
+            if (operators === 'all') return stop
+            if (operators === 'ztm' && stop.stopId < 30000) return stop
+            if (operators === 'zkm' && stop.stopId >= 30000) return stop
         })
         .filter((stop: any) => {
             const stopDesc = stop.stopDesc.toLowerCase()
@@ -56,12 +56,18 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
         })
         .map((stop: any) => <ListElement key={stop.stopId + 'accordition'} stop={stop} />)
 
-    if (loading) { return <h1>loading</h1> }
+    if (loading) {
+        return <>
+            <Dimmer active inverted>
+                <Loader inverted size='big' content='Pobieranie listy przystanków' />
+            </Dimmer>
+        </>
+    }
     if (error) { return <h1>Error!</h1> }
-    return <Container >
+    return <Container widths={1} >
         <div ref={contextRef}>
             <Filter search={handleSearch} handleOperator={handleOperator} operator={operators} name={search} stickyContext={contextRef} />
-            <Accordion styled >
+            <Accordion fluid styled >
                 {list}
             </Accordion>
         </div>

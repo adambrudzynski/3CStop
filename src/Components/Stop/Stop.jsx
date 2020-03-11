@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { fetchGdanskStop } from './gdanskFetcher';
 import { fetchGdyniaStop } from './gdyniaFetcher';
 import { GdyniaStop } from './GdyniaStop';
+import { Placeholder } from 'semantic-ui-react';
 
 export const Stop = ({ stopId }) => {
     const [table, setTable] = useState(null);
@@ -13,7 +14,7 @@ export const Stop = ({ stopId }) => {
         if (stopId < 30000) {
             getGdansk(stopId)
         }
-        else {getGdynia(stopId)}
+        else { getGdynia(stopId) }
 
     }, [stopId])
 
@@ -32,10 +33,17 @@ export const Stop = ({ stopId }) => {
         setGdyniaStop(stop)
         setLoading(false)
     }
+    const placeholder = <Placeholder>
+        <Placeholder.Line />
+        <Placeholder.Line />
+        <Placeholder.Line />
+        <Placeholder.Line />
+        <Placeholder.Line />
+    </Placeholder>
 
     return loading ?
-        <p>loading</p>
-        : (gdyniaStop 
+        <>   {placeholder}</>
+        : (gdyniaStop
             ? <GdyniaStop stopid={stopId} stop={gdyniaStop} />
-            :<div dangerouslySetInnerHTML={table}></div>)
+            : <div dangerouslySetInnerHTML={table}></div>)
 }
