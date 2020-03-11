@@ -14,6 +14,7 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<boolean | null>(null)
     const [search, setSearch] = useState<string>('')
+    const [operators, setOperators] = useState<Array<string>>([])
 
     useEffect(() => {
         fetchList()
@@ -28,8 +29,6 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
             const { data } = await axios.get(url);
             setStops(data[today].stops)
             setLoading(false)
-            console.log(stops);
-
         }
         catch (err) {
             setError(err)
@@ -39,10 +38,18 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
 
     const handleSearch = (search: string) => {
         setSearch(search)
+    }
 
+    const handleOperator = (operator: Array<string>) => {
+        setOperators(operator)
     }
 
     const list = stops
+        .filter((stop: any) => {
+            if (operators.length === 0 || operators.length === 2 )return stop
+            if (operators.length === 1 && operators.includes('ztm') && stop.stopId < 30000 ) return stop
+            if (operators.length === 1 && operators.includes('zkm') && stop.stopId >= 30000) return stop
+        })
         .filter((stop: any) => {
             const stopDesc = stop.stopDesc.toLowerCase()
             return stopDesc.includes(search)
@@ -53,7 +60,7 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
     if (error) { return <h1>Error!</h1> }
     return <Container >
         <div ref={contextRef}>
-            <Filter search={handleSearch} name={search} stickyContext={contextRef} />
+            <Filter search={handleSearch} handleOperator={handleOperator} operator={operators} name={search} stickyContext={contextRef} />
             <Accordion styled >
                 {list}
             </Accordion>
