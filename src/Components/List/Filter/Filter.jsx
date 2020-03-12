@@ -22,6 +22,7 @@ const Filter = ({ search, name, stickyContext, operator, handleOperator }) => {
         <Form >
             <Form.Group unstackable widths={2} >
                 <Form.Input
+                
                     placeholder='Wyszukaj...'
                     name='search'
                     icon='search'
