@@ -2,14 +2,14 @@ import React from 'react'
 import { Form, Sticky } from 'semantic-ui-react'
 
 const Filter = ({ search, name, stickyContext, operator, handleOperator }) => {
-    const handleChange = ({target}) => {
+    const handleChange = ({ target }) => {
         search(target.value.toLowerCase());
     }
 
-    const handleDropdownChange = (e, {value}) => {
+    const handleDropdownChange = (e, { value }) => {
         console.log(value);
         handleOperator(value)
-        
+
     }
 
     const options = [
@@ -18,9 +18,9 @@ const Filter = ({ search, name, stickyContext, operator, handleOperator }) => {
         { key: 'all', text: 'Wszyscy', value: 'all' }
     ]
 
-    return <Sticky context={stickyContext}>
-        <Form unstackable >
-            <Form.Group widths={2} >
+    return <Sticky context={stickyContext} >
+        <Form >
+            <Form.Group unstackable widths={2} >
                 <Form.Input
                     placeholder='Wyszukaj...'
                     name='search'
@@ -28,13 +28,16 @@ const Filter = ({ search, name, stickyContext, operator, handleOperator }) => {
                     iconPosition='left'
                     value={name}
                     onChange={handleChange}
+
                 />
                 <Form.Dropdown
+                    compact
                     placeholder='Przewoźnik'
                     selection
                     options={options}
                     onChange={handleDropdownChange}
                     value={operator}
+
                 />
             </Form.Group>
         </Form>

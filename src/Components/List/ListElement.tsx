@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react'
-import { List, Accordion, Label } from 'semantic-ui-react'
+import { List, Accordion, Label, Header } from 'semantic-ui-react'
 import { Stop } from '../Stop/Stop'
 
 interface Props {
@@ -45,7 +45,7 @@ export const ListElement = ({ stop }: any) => {
                 ? <>
                     <Label size='tiny' color='blue' content={'ZKM'} />
                     {stop.stopDesc}
-                    {stop.stopCode && <Label circular size='tiny' content={stop.stopCode} />}                </>
+                    {stop.stopCode && <Label circular size='tiny' content={stop.stopCode} />}</>
                 : <>
                     <Label size='tiny' color='red' content={'ZTM'} />
                     {stop.stopDesc}

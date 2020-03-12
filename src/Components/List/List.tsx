@@ -64,14 +64,13 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
         </>
     }
     if (error) { return <h1>Error!</h1> }
-    return <Container widths={1} >
-        <div ref={contextRef}>
-            <Filter search={handleSearch} handleOperator={handleOperator} operator={operators} name={search} stickyContext={contextRef} />
-            <Accordion fluid styled >
-                {list}
-            </Accordion>
-        </div>
-    </Container>
+    return <div ref={contextRef}>
+        <Filter search={handleSearch} handleOperator={handleOperator} operator={operators} name={search} stickyContext={contextRef} />
+        <Accordion fluid styled >
+            {list}
+        </Accordion>
+    </div>
+
 }
 
 export { StopList }
