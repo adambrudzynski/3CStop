@@ -1,7 +1,7 @@
 import React from 'react'
-import { Form, Sticky, Icon } from 'semantic-ui-react'
+import { Input, Dropdown, Icon, Menu } from 'semantic-ui-react'
 
-const Filter = ({ search, name, stickyContext, operator, handleOperator }) => {
+const Filter = ({ search, name, operator, handleOperator }) => {
     const handleChange = ({ target }) => {
         search(target.value.toLowerCase());
     }
@@ -22,27 +22,27 @@ const Filter = ({ search, name, stickyContext, operator, handleOperator }) => {
         { key: 'all', text: 'Wszyscy', value: 'all' }
     ]
 
-    return <Sticky context={stickyContext} >
-        <Form >
-            <Form.Group unstackable widths={2} >
-                <Form.Input
-                    placeholder='Wyszukaj...'
-                    name='search'
-                    icon={<Icon name='cancel' inverted circular link onClick={handleClear} />}
-                    value={name}
-                    onChange={handleChange}
-                />
-                <Form.Dropdown
-                    compact
-                    placeholder='Przewoźnik'
-                    selection
-                    options={options}
-                    onChange={handleDropdownChange}
-                    value={operator}
-                />
-            </Form.Group>
-        </Form>
-    </Sticky>
+    return <Menu compact borderless fixed='bottom' >
+        <Menu.Item fitted>
+            <Input
+                placeholder='Wyszukaj...'
+                name='search'
+                icon={name.length > 0 && <Icon name='cancel' circular link onClick={handleClear} />}
+                value={name}
+                onChange={handleChange}
+            />
+        </Menu.Item>
+        <Menu.Item fitted position='right'>
+            <Dropdown
+                compact
+                placeholder='Przewoźnik'
+                selection
+                options={options}
+                onChange={handleDropdownChange}
+                value={operator}
+            />
+        </Menu.Item>
+    </Menu>
 
 }
 
