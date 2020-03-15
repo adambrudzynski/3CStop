@@ -1,11 +1,12 @@
-import React, { useState, useEffect, createRef } from 'react'
-import { Accordion, Container, Dimmer, Loader } from 'semantic-ui-react'
 
+// import distFrom from 'distance-from'
+import React, { useState, useEffect } from 'react'
+import { Accordion, Dimmer, Loader } from 'semantic-ui-react'
 import { getDate } from '../../utils/getDate'
 import axios from 'axios'
 import { ListElement } from './ListElement'
 import { Filter } from './Filter/Filter'
-import { sorter } from './sorter'
+import { sorter, locationSorter } from './sorter'
 
 
 const today = getDate()
@@ -16,6 +17,7 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
     const [error, setError] = useState<boolean | null>(null)
     const [search, setSearch] = useState<string>('')
     const [operators, setOperators] = useState<string>('all')
+    const [location, setLocation] = useState<Array<[Number, Number]> | null>(null)
 
     useEffect(() => {
         fetchList()
@@ -43,8 +45,20 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
         setOperators(operator)
     }
 
+    const handleLocation = (userLocation: Array<[Number, Number]>) => {
+        setLocation(userLocation);
+    }
+    const distFrom = require('distance-from')
+
     const list = stops
-        .sort(sorter)
+        .map((stop: any) => {
+            if (location) {
+                stop.distance = Math.round(distFrom(location).to([stop.stopLat, stop.stopLon]).in('m'))
+                return stop
+            }
+            return stop
+        })
+        .sort(locationSorter)
         .filter((stop: any) => {
             if (operators === 'all') return stop
             if (operators === 'ztm' && stop.stopId < 30000) return stop
@@ -65,7 +79,7 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
     }
     if (error) { return <h1>Error!</h1> }
     return <>
-        <Filter search={handleSearch} handleOperator={handleOperator} operator={operators} name={search} />
+        <Filter search={handleSearch} handleOperator={handleOperator} operator={operators} name={search} location={handleLocation} />
         <Accordion fluid styled >
             {list}
         </Accordion>

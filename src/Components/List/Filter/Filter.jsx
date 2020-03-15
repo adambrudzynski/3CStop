@@ -1,7 +1,8 @@
 import React from 'react'
 import { Input, Dropdown, Icon, Menu } from 'semantic-ui-react'
+import { LocationBtn } from './LocationBtn';
 
-const Filter = ({ search, name, operator, handleOperator }) => {
+const Filter = ({ search, name, operator, handleOperator, location }) => {
     const handleChange = ({ target }) => {
         search(target.value.toLowerCase());
     }
@@ -23,7 +24,10 @@ const Filter = ({ search, name, operator, handleOperator }) => {
     ]
 
     return <Menu compact borderless fixed='bottom' >
-        <Menu.Item fitted>
+        <Menu.Item fitted >
+            <LocationBtn location={location}/>
+        </Menu.Item>
+        <Menu.Item fitted >
             <Input
                 placeholder='Wyszukaj...'
                 name='search'
@@ -34,7 +38,7 @@ const Filter = ({ search, name, operator, handleOperator }) => {
         </Menu.Item>
         <Menu.Item fitted position='right'>
             <Dropdown
-                compact
+
                 placeholder='Przewoźnik'
                 selection
                 options={options}

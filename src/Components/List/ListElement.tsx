@@ -45,11 +45,14 @@ export const ListElement = ({ stop }: any) => {
                 ? <>
                     <Label size='tiny' color='blue' content={'ZKM'} />
                     {stop.stopDesc}
-                    {stop.stopCode && <Label circular size='tiny' content={stop.stopCode} />}</>
+                    {stop.stopCode && <Label circular size='tiny' content={stop.stopCode} />}
+                    {stop.distance && <Label circular color='olive' size='tiny' content={`${stop.distance >= 1000 ? (Math.round(stop.distance / 100)) / 10 + 'km' : stop.distance + 'm'}`} />}
+                </>
                 : <>
                     <Label size='tiny' color='red' content={'ZTM'} />
                     {stop.stopDesc}
                     {stop.stopCode && <Label circular size='tiny' content={stop.stopCode} />}
+                    {stop.distance && <Label circular color='yellow' size='tiny' content={`${stop.distance >= 1000 ? (Math.round(stop.distance / 100)) / 10 + 'km' : stop.distance + 'm'}`} />}
                 </>
             }
         </Accordion.Title>
