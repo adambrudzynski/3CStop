@@ -1,41 +1,30 @@
-
-// import distFrom from 'distance-from'
-import React, { useState, useEffect } from 'react'
+import React, { useState} from 'react'
 import { Accordion, Dimmer, Loader } from 'semantic-ui-react'
 import { getDate } from '../../utils/getDate'
 import axios from 'axios'
+import useSWR from 'swr'
+
 import { ListElement } from './ListElement'
 import { Filter } from './Filter/Filter'
 import { sorter, locationSorter } from './sorter'
 
-
+const fetchList = async () => {
+    try {
+        const url = "https://ckan.multimediagdansk.pl/dataset/c24aa637-3619-4dc2-a171-a23eec8f2172/resource/4c4025f0-01bf-41f7-a39f-d156d201b82b/download/stops.json";
+        const { data } = await axios.get(url);
+        return (data[today].stops)
+    }
+    catch (err) {
+        return (err)
+    }
+}
 const today = getDate()
 
 const StopList: Function = (): JSX.Element[] | JSX.Element => {
-    const [stops, setStops] = useState([])
-    const [loading, setLoading] = useState<boolean>(false)
-    const [error, setError] = useState<boolean | null>(null)
+    const { data, error } = useSWR("https://ckan.multimediagdansk.pl/dataset/c24aa637-3619-4dc2-a171-a23eec8f2172/resource/4c4025f0-01bf-41f7-a39f-d156d201b82b/download/stops.json", fetchList)
     const [search, setSearch] = useState<string>('')
     const [operators, setOperators] = useState<string>('all')
     const [location, setLocation] = useState<Array<[Number, Number]> | null>(null)
-
-    useEffect(() => {
-        fetchList()
-    }, [])
-
-    const fetchList = async () => {
-        try {
-            setLoading(true)
-            const url = "https://ckan.multimediagdansk.pl/dataset/c24aa637-3619-4dc2-a171-a23eec8f2172/resource/4c4025f0-01bf-41f7-a39f-d156d201b82b/download/stops.json";
-            const { data } = await axios.get(url);
-            setStops(data[today].stops)
-            setLoading(false)
-        }
-        catch (err) {
-            setError(err)
-            setLoading(false)
-        }
-    }
 
     const handleSearch = (search: string) => {
         setSearch(search)
@@ -50,7 +39,7 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
     }
     const distFrom = require('distance-from')
 
-    const list = stops
+    const list = data && data
         .map((stop: any) => {
             if (location) {
                 stop.distance = Math.round(distFrom(location).to([stop.stopLat, stop.stopLon]).in('m'))
@@ -70,7 +59,7 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
         })
         .map((stop: any) => <ListElement key={stop.stopId + 'accordition'} stop={stop} />)
 
-    if (loading) {
+    if (!data) {
         return <>
             <Dimmer active inverted>
                 <Loader inverted size='big' content='Pobieranie listy przystanków' />
@@ -80,11 +69,10 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
     if (error) { return <h1>Error!</h1> }
     return <>
         <Filter search={handleSearch} handleOperator={handleOperator} operator={operators} name={search} location={handleLocation} />
-        <Accordion fluid styled >
+        <Accordion fluid styled className="main-list">
             {list}
         </Accordion>
     </>
-
 }
 
 export { StopList }
