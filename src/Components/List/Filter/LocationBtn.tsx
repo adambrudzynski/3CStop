@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Label, Message } from 'semantic-ui-react'
+import { Button } from 'semantic-ui-react'
 
 
 interface MessageType {
@@ -55,9 +55,10 @@ export const LocationBtn = ({ location }: AppProps) => {
         navigator.geolocation.getCurrentPosition(success, error, options);
     }
 
-    return <Button basic icon='location arrow' color={message.type || undefined} onClick={getLocation} >
-        {/* {message.message && <Message color={message.type} floating compact>
-            {message.message}
-        </Message>} */}
+    return <Button
+        basic
+        icon='location arrow'
+        color={message.type || undefined}
+        onClick={getLocation} >
     </Button>
 }

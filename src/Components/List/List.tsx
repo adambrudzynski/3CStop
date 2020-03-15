@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState } from 'react'
 import { Accordion, Dimmer, Loader } from 'semantic-ui-react'
 import { getDate } from '../../utils/getDate'
 import axios from 'axios'
@@ -25,6 +25,7 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
     const [search, setSearch] = useState<string>('')
     const [operators, setOperators] = useState<string>('all')
     const [location, setLocation] = useState<Array<[Number, Number]> | null>(null)
+    const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
     const handleSearch = (search: string) => {
         setSearch(search)
@@ -37,6 +38,9 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
     const handleLocation = (userLocation: Array<[Number, Number]>) => {
         setLocation(userLocation);
     }
+
+    const manageActive = (id: number) => setActiveIndex(id)
+
     const distFrom = require('distance-from')
 
     const list = data && data
@@ -57,7 +61,7 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
             const stopDesc = stop.stopDesc.toLowerCase()
             return stopDesc.includes(search)
         })
-        .map((stop: any) => <ListElement key={stop.stopId + 'accordition'} stop={stop} />)
+        .map((stop: any) => <ListElement key={stop.stopId + 'accordition'} stop={stop} activeIndex={activeIndex} manageActive={manageActive} />)
 
     if (!data) {
         return <>

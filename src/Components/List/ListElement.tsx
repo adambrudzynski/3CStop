@@ -1,46 +1,22 @@
 import React, { useState, Fragment } from 'react'
-import { List, Accordion, Label, Header } from 'semantic-ui-react'
+import { Accordion, Label } from 'semantic-ui-react'
 import { Stop } from '../Stop/Stop'
 
-interface Props {
-    stop: {
-        // stopId: number;
-        // stopCode: string;
-        // stopName: string;
-        // stopShortName: string;
-        // stopDesc: string;
-        // subName: string;
-        // date: string;
-        // zoneId: number;
-        // zoneName: string;
-        // virtual: number;
-        // nonpassenger: number;
-        // depot: number;
-        // ticketZoneBorder: number;
-        // onDemand: number;
-        // activationDate: string;
-        // stopLat: number;
-        // stopLon: number;
-        // stopUrl: string;
-        // locationType: null;
-        // parentStation: null;
-        // stopTimezone: string
-        // wheelchairBoarding: null;
-    }
-
-
-}
-
-export const ListElement = ({ stop }: any) => {
+export const ListElement = ({ stop, activeIndex, manageActive }: any) => {
     const [colapsed, setColapsed] = useState(true)
 
-    const handleClick = () => {
+    const handleClick = (id:number) => {
         setColapsed(!colapsed)
+        manageActive(id)
         console.log(stop)
     }
 
     return <Fragment key={stop.stopId}>
-        <Accordion.Title key={stop.stopId + 'title'} active={!colapsed} onClick={handleClick}>
+        <Accordion.Title
+            key={stop.stopId + 'title'}
+            active={activeIndex === stop.stopId}
+            index={stop.stopId}
+            onClick={()=>handleClick(stop.stopId)}>
             {stop.stopId >= 30000
                 ? <>
                     <Label size='tiny' color='blue' content={'ZKM'} />
@@ -56,7 +32,7 @@ export const ListElement = ({ stop }: any) => {
                 </>
             }
         </Accordion.Title>
-        <Accordion.Content key={stop.stopId + 'content'} active={!colapsed} >
+        <Accordion.Content key={stop.stopId + 'content'} active={activeIndex === stop.stopId} >
             {!colapsed &&
                 <Stop stopId={stop.stopId} />}
         </Accordion.Content>
