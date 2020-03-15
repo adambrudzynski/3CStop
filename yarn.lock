@@ -1760,6 +1760,13 @@ alphanum-sort@^1.0.0:
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
+amonad@^0.8.2:
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/amonad/-/amonad-0.8.5.tgz#fec54674ad62c68c7935a44654c2ad39b2fe796d"
+  integrity sha512-hYpGf2bGIxUF+TaR/xt7k1FXi5roNA553xfTXZO07AMK4PXjAphIK0f9XjdSwNUHG0ZDzavOSB6RaF3KzTgtEg==
+  dependencies:
+    tslib "^1.9.3"
+
 ansi-colors@^3.0.0:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/ansi-colors/-/ansi-colors-3.2.4.tgz#e3a3da4bfbae6c86a9c285625de124a234026fbf"
@@ -3550,6 +3557,13 @@ dir-glob@2.0.0:
   dependencies:
     arrify "^1.0.1"
     path-type "^3.0.0"
+
+distance-from@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/distance-from/-/distance-from-1.1.2.tgz#e2c29b972290a69d693ee2464c302e34bfce2352"
+  integrity sha512-USH+DKr8rRRa/1LawlyRneNOuLRLmK1w77VDx1FGFG1f5NKY87F1cmWPxAOSw/DWQnKAiKrcpeRXvStOzNcRNQ==
+  dependencies:
+    amonad "^0.8.2"
 
 dns-equal@^1.0.0:
   version "1.0.0"
@@ -9997,6 +10011,11 @@ tslib@^1.8.1, tslib@^1.9.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
   integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
+
+tslib@^1.9.3:
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.11.1.tgz#eb15d128827fbee2841549e171f45ed338ac7e35"
+  integrity sha512-aZW88SY8kQbU7gpV19lN24LtXh/yD4ZZg6qieAJDDg+YBsJcSmLGK9QpnUjAKVG/xefmvJGd1WUmfpT/g6AJGA==
 
 tsutils@^3.17.1:
   version "3.17.1"

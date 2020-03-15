@@ -1,9 +1,13 @@
 import React from 'react'
-import { Form, Sticky } from 'semantic-ui-react'
+import { Form, Sticky, Icon } from 'semantic-ui-react'
 
 const Filter = ({ search, name, stickyContext, operator, handleOperator }) => {
     const handleChange = ({ target }) => {
         search(target.value.toLowerCase());
+    }
+
+    const handleClear = () => {
+        search('')
     }
 
     const handleDropdownChange = (e, { value }) => {
@@ -22,14 +26,11 @@ const Filter = ({ search, name, stickyContext, operator, handleOperator }) => {
         <Form >
             <Form.Group unstackable widths={2} >
                 <Form.Input
-                
                     placeholder='Wyszukaj...'
                     name='search'
-                    icon='search'
-                    iconPosition='left'
+                    icon={<Icon name='cancel' inverted circular link onClick={handleClear} />}
                     value={name}
                     onChange={handleChange}
-
                 />
                 <Form.Dropdown
                     compact
@@ -38,7 +39,6 @@ const Filter = ({ search, name, stickyContext, operator, handleOperator }) => {
                     options={options}
                     onChange={handleDropdownChange}
                     value={operator}
-
                 />
             </Form.Group>
         </Form>

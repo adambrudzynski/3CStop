@@ -5,6 +5,7 @@ import { getDate } from '../../utils/getDate'
 import axios from 'axios'
 import { ListElement } from './ListElement'
 import { Filter } from './Filter/Filter'
+import { sorter } from './sorter'
 
 
 const today = getDate()
@@ -45,6 +46,7 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
     }
 
     const list = stops
+        .sort(sorter)
         .filter((stop: any) => {
             if (operators === 'all') return stop
             if (operators === 'ztm' && stop.stopId < 30000) return stop
