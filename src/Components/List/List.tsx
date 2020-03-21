@@ -1,27 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState} from 'react'
 import { Accordion, Dimmer, Loader } from 'semantic-ui-react'
-import { getDate } from '../../utils/getDate'
-import axios from 'axios'
 import useSWR from 'swr'
 
 import { ListElement } from './ListElement'
 import { Filter } from './Filter/Filter'
 import { sorter, locationSorter } from './sorter'
-
-const fetchList = async () => {
-    try {
-        const url = "https://ckan.multimediagdansk.pl/dataset/c24aa637-3619-4dc2-a171-a23eec8f2172/resource/4c4025f0-01bf-41f7-a39f-d156d201b82b/download/stops.json";
-        const { data } = await axios.get(url);
-        return (data[today].stops)
-    }
-    catch (err) {
-        return (err)
-    }
-}
-const today = getDate()
+import { fetchLists } from './fetchList'
 
 const StopList: Function = (): JSX.Element[] | JSX.Element => {
-    const { data, error } = useSWR("https://ckan.multimediagdansk.pl/dataset/c24aa637-3619-4dc2-a171-a23eec8f2172/resource/4c4025f0-01bf-41f7-a39f-d156d201b82b/download/stops.json", fetchList)
+    const { data, error } = useSWR(" ", fetchLists)
     const [search, setSearch] = useState<string>('')
     const [operators, setOperators] = useState<string>('all')
     const [location, setLocation] = useState<Array<[Number, Number]> | null>(null)
@@ -58,8 +45,8 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
             if (operators === 'zkm' && stop.stopId >= 30000) return stop
         })
         .filter((stop: any) => {
-            const stopDesc = stop.stopDesc.toLowerCase()
-            return stopDesc.includes(search)
+            const stopName = stop.stopName? stop.stopName.toLowerCase(): stop.stopDesc.toLowerCase()
+            return stopName.includes(search)
         })
         .map((stop: any) => <ListElement key={stop.stopId + 'accordition'} stop={stop} activeIndex={activeIndex} manageActive={manageActive} />)
 

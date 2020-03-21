@@ -14,25 +14,25 @@ export const ListElement = ({ stop, activeIndex, manageActive }: any) => {
     return <Fragment key={stop.stopId}>
         <Accordion.Title
             key={stop.stopId + 'title'}
-            active={activeIndex === stop.stopId}
+            active={activeIndex === stop.stopId&&!colapsed}
             index={stop.stopId}
             onClick={()=>handleClick(stop.stopId)}>
             {stop.stopId >= 30000
                 ? <>
                     <Label size='tiny' color='blue' content={'ZKM'} />
-                    {stop.stopDesc}
+                    {stop.stopName}
                     {stop.stopCode && <Label circular size='tiny' content={stop.stopCode} />}
                     {stop.distance && <Label circular color='olive' size='tiny' content={`${stop.distance >= 1000 ? (Math.round(stop.distance / 100)) / 10 + 'km' : stop.distance + 'm'}`} />}
                 </>
                 : <>
                     <Label size='tiny' color='red' content={'ZTM'} />
-                    {stop.stopDesc}
+                    {stop.stopName}
                     {stop.stopCode && <Label circular size='tiny' content={stop.stopCode} />}
                     {stop.distance && <Label circular color='yellow' size='tiny' content={`${stop.distance >= 1000 ? (Math.round(stop.distance / 100)) / 10 + 'km' : stop.distance + 'm'}`} />}
                 </>
             }
         </Accordion.Title>
-        <Accordion.Content key={stop.stopId + 'content'} active={activeIndex === stop.stopId} >
+        <Accordion.Content key={stop.stopId + 'content'} active={activeIndex === stop.stopId &&!colapsed} >
             {!colapsed &&
                 <Stop stopId={stop.stopId} />}
         </Accordion.Content>
