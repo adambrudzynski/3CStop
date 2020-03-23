@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState } from 'react'
 import { Accordion, Dimmer, Loader } from 'semantic-ui-react'
 import useSWR from 'swr'
 
@@ -7,8 +7,12 @@ import { Filter } from './Filter/Filter'
 import { sorter, locationSorter } from './sorter'
 import { fetchLists } from './fetchList'
 
+const swrOptions = {
+    revalidateOnFocus: false
+}
+
 const StopList: Function = (): JSX.Element[] | JSX.Element => {
-    const { data, error } = useSWR(" ", fetchLists)
+    const { data, error } = useSWR(" ", fetchLists, swrOptions)
     const [search, setSearch] = useState<string>('')
     const [operators, setOperators] = useState<string>('all')
     const [location, setLocation] = useState<Array<[Number, Number]> | null>(null)
@@ -45,7 +49,7 @@ const StopList: Function = (): JSX.Element[] | JSX.Element => {
             if (operators === 'zkm' && stop.stopId >= 30000) return stop
         })
         .filter((stop: any) => {
-            const stopName = stop.stopName? stop.stopName.toLowerCase(): stop.stopDesc.toLowerCase()
+            const stopName = stop.stopName ? stop.stopName.toLowerCase() : stop.stopDesc.toLowerCase()
             return stopName.includes(search)
         })
         .map((stop: any) => <ListElement key={stop.stopId + 'accordition'} stop={stop} activeIndex={activeIndex} manageActive={manageActive} />)
