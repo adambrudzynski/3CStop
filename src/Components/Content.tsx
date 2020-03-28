@@ -20,6 +20,8 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
     const [location, setLocation] = useState<Array<[Number, Number]> | null>(null)
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
+    const center = location || [process.env.REACT_APP_DEFAULT_LOC_CENTER_LAT, process.env.REACT_APP_DEFAULT_LOC_CENTER_LON];
+
     const handleSearch = (search: string) => {
         setSearch(search)
     }
@@ -38,8 +40,8 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
 
     const list = data && data
         .map((stop: any) => {
-            if (location) {
-                stop.distance = Math.round(distFrom(location).to([stop.stopLat, stop.stopLon]).in('m'))
+            if (center) {
+                stop.distance = Math.round(distFrom(center).to([stop.stopLat, stop.stopLon]).in('m'))
                 return stop
             }
             return stop
@@ -69,11 +71,9 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
                         </Grid.Column>
                         <Grid.Column>
                             <Sticky context={contextRef}>
-                                <StopMap />
+                                <StopMap stops={list} center={center} />
                             </Sticky>
                         </Grid.Column>
-
-
                     </Grid>
                 </Ref>
             </Responsive>
