@@ -40,10 +40,7 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
 
     const list = data && data
         .map((stop: any) => {
-            if (center) {
-                stop.distance = Math.round(distFrom(center).to([stop.stopLat, stop.stopLon]).in('m'))
-                return stop
-            }
+            stop.distance = Math.round(distFrom(center).to([stop.stopLat, stop.stopLon]).in('m'))
             return stop
         })
         .sort(locationSorter)
@@ -60,18 +57,28 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
 
     return <>
         <Segment.Group>
-            <Responsive as={Segment} maxWidth={600}>
-                <StopList stops={list} />
+            <Responsive maxWidth={600}>
+                <StopList
+                    stops={list}
+                    activeIndex={activeIndex}
+                    manageActive={manageActive} />
             </Responsive>
-            <Responsive as={Segment} minWidth={601}>
+            <Responsive minWidth={601}>
                 <Ref innerRef={contextRef}>
                     <Grid columns={2}>
                         <Grid.Column>
-                            <StopList stops={list} />
+                            <StopList
+                                stops={list}
+                                activeIndex={activeIndex}
+                                manageActive={manageActive} />
                         </Grid.Column>
                         <Grid.Column>
                             <Sticky context={contextRef}>
-                                <StopMap stops={list} center={center} />
+                                <StopMap
+                                    stops={list}
+                                    center={center}
+                                    activeIndex={activeIndex}
+                                    manageActive={manageActive} />
                             </Sticky>
                         </Grid.Column>
                     </Grid>
