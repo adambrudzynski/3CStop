@@ -1,14 +1,12 @@
 import React from 'react';
-import { StopList } from './Components/List/List';
 import 'semantic-ui-css/semantic.min.css'
 import './app.css'
+import Content from './Components/Content';
 
 
 const App =() =>{
   return (
-    <div className='main'>
-      <StopList key='list' />
-    </div>
+      <Content key='list' />
   );
 }
 

@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(198, 238, 238);
+    background-color: rgb(240, 240, 240);
 }
 
 .ui.form .fields {
@@ -8,3 +8,7 @@ body{
 .main-list {
     padding-bottom: 30px;
 }
+.leaflet-container {
+    width: 100%;
+    height: 88vh;
+  }
