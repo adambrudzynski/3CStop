@@ -17,10 +17,10 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
     const { data, error } = useSWR(" ", fetchLists, swrOptions)
     const [search, setSearch] = useState<string>('')
     const [operators, setOperators] = useState<string>('all')
-    const [location, setLocation] = useState<Array<[Number, Number]> | null>(null)
+    const [location, setLocation] = useState<[number, number] | null>(null)
+    const [center, setCenter] = useState<[number | string | undefined, number | string | undefined]>([process.env.REACT_APP_DEFAULT_LOC_CENTER_LAT, process.env.REACT_APP_DEFAULT_LOC_CENTER_LON])
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
-    const center = location || [process.env.REACT_APP_DEFAULT_LOC_CENTER_LAT, process.env.REACT_APP_DEFAULT_LOC_CENTER_LON];
 
     const handleSearch = (search: string) => {
         setSearch(search)
@@ -30,17 +30,22 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
         setOperators(operator)
     }
 
-    const handleLocation = (userLocation: Array<[Number, Number]>) => {
+    const handleLocation = (userLocation: [number, number]) => {
         setLocation(userLocation);
+        setCenter(userLocation)
     }
 
-    const manageActive = (id: number) => setActiveIndex(id)
+    const manageActive = (stop: any) => {
+        setActiveIndex(stop.stopId)
+        setCenter([stop.stopLat, stop.stopLon])
+    }
 
     const distFrom = require('distance-from')
 
     const list = data && data
         .map((stop: any) => {
-            stop.distance = Math.round(distFrom(center).to([stop.stopLat, stop.stopLon]).in('m'))
+            stop.distance = location && Math.round(distFrom(location).to([stop.stopLat, stop.stopLon]).in('m'))
+            stop.operator = stop.stopId < 30000 ? 'ztm' : 'zkm'
             return stop
         })
         .sort(locationSorter)
@@ -84,7 +89,12 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
                     </Grid>
                 </Ref>
             </Responsive>
-            <Filter search={handleSearch} handleOperator={handleOperator} operator={operators} name={search} location={handleLocation} />
+            <Filter
+                search={handleSearch}
+                handleOperator={handleOperator}
+                operator={operators}
+                name={search}
+                location={handleLocation} />
         </Segment.Group>
     </>
 }

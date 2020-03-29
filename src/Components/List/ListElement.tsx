@@ -1,28 +1,30 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, forwardRef, useEffect } from 'react'
 import { Accordion, Label } from 'semantic-ui-react'
 import { Stop } from '../Stop/Stop'
 
-export const ListElement = ({ stop, activeIndex, manageActive, refs }: any) => {
+const ListElement = ({ stop, activeIndex, manageActive }: any, ref: any) => {
     const [colapsed, setColapsed] = useState(true)
 
-    const stopRef: any = React.createRef()
+    useEffect(() => {
+        if (activeIndex === stop.stopId) {
+            ref.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+            });
+        }
+    }, [activeIndex])
 
-    const handleClick = (id: number) => {
-        manageActive(id)
+
+    const handleClick = () => {
+        manageActive(stop)
         console.log(stop)
-        // if (!colapsed) {
-        //     stopRef.current.scrollIntoView({
-        //         behavior: 'smooth',
-        //         block: 'start',
-        //     });
-        // }
     }
 
-    return <Fragment key={stop.stopId}>
+    return <div ref={ref} key={stop.stopId} >
         <Accordion.Title
             active={activeIndex === stop.stopId}
             index={stop.stopId}
-            onClick={() => handleClick(stop.stopId)}>
+            onClick={handleClick}>
             {stop.stopId >= 30000
                 ? <>
                     <Label size='tiny' color='blue' content={'ZKM'} />
@@ -43,6 +45,8 @@ export const ListElement = ({ stop, activeIndex, manageActive, refs }: any) => {
             {activeIndex === stop.stopId &&
                 <Stop stopId={stop.stopId} />}
         </Accordion.Content>
-    </Fragment>
+    </div>
+
 
 }
+export default forwardRef(ListElement)

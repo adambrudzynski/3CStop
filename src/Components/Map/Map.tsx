@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Map, Marker, Popup, TileLayer } from "react-leaflet";
+import { Map, Marker, Popup, TileLayer, AttributionControl } from "react-leaflet";
 import { Icon } from "leaflet";
 import { locationSorter } from "../List/sorter";
 
@@ -9,25 +9,23 @@ const StopMap: Function = ({ stops, center, manageActive, activeIndex }: any): J
 
     const handleMoveend = (e: any) => {
         const current = e.target.getCenter()
-        setTimeout(() => {
-            setCurrCenter([current.lat, current.lng])
-        }, 1000);
+        setCurrCenter([current.lat, current.lng])
     }
+
     const distFrom = require('distance-from')
 
     const markers = stops ?
         stops.
             map((stop: any) => {
-                // return distFrom(currCenter).to([stop.stopLat, stop.stopLon]).in('m') < 3000
                 stop.distance = Math.round(distFrom(currCenter).to([stop.stopLat, stop.stopLon]).in('m'))
                 return stop
             })
             .sort(locationSorter)
-            .slice(0, 60)
+            .slice(0, 80)
         : null
 
     const iconActive = new Icon({
-        iconUrl: '/3CStop/assets/maps-active.svg',
+        iconUrl: '/3CStop/assets/map-active.svg',
         iconSize: [25, 30],
     })
     const iconGdn = new Icon({
@@ -45,9 +43,11 @@ const StopMap: Function = ({ stops, center, manageActive, activeIndex }: any): J
 
     return (
         <Map
+            animate
             center={center}
-            zoom={14}
-            onMoveend={(e: any) => handleMoveend(e)}>>
+            zoom={15}
+            attributionControl={false}
+            onMoveend={(e: any) => handleMoveend(e)}>
             {markers && markers.map((stop: any) => (
                 <Marker
                     key={stop.stopId}
@@ -55,16 +55,19 @@ const StopMap: Function = ({ stops, center, manageActive, activeIndex }: any): J
                         [stop.stopLat, stop.stopLon]
                     }
                     onClick={() => {
-                        manageActive(stop.stopId)
+                        manageActive(stop)
                     }}
 
-                    icon={stop.stopId > 30000 ? iconGdy : iconGdn}
+                    icon={stop.stopId === activeIndex
+                        ? iconActive
+                        : stop.operator === 'zkm' ? iconGdy : iconGdn}
                 />
             ))}
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             />
+            <AttributionControl position="topright" />
         </Map>
     );
 }
