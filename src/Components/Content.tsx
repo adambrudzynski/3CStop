@@ -1,12 +1,13 @@
 import React, { createRef, useState } from 'react'
 import useSWR from 'swr'
-import { Responsive, Segment, Grid, Ref, Sticky } from 'semantic-ui-react'
+import { Grid, Ref, Sticky, Responsive } from 'semantic-ui-react'
 
 import { StopList } from './List/List'
 import StopMap from './Map/Map'
 import { Filter } from './List/Filter/Filter'
 import { locationSorter } from './List/sorter'
 import { fetchLists } from './List/fetchList'
+import { Stop } from './Stop/Stop'
 
 const swrOptions = {
     revalidateOnFocus: false
@@ -40,6 +41,10 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
         setCenter([stop.stopLat, stop.stopLon])
     }
 
+    const resetActiveIndex = () => {
+        setActiveIndex(null)
+    }
+
     const distFrom = require('distance-from')
 
     const list = data && data
@@ -50,52 +55,53 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
         })
         .sort(locationSorter)
         .filter((stop: any) => {
-            if (operators === 'all') return stop
-            if (operators === 'ztm' && stop.stopId < 30000) return stop
-            if (operators === 'zkm' && stop.stopId >= 30000) return stop
+            if (operators === 'all') {
+                return stop
+            }
+            return operators === stop.operator
         })
         .filter((stop: any) => {
             const stopName = stop.stopName ? stop.stopName.toLowerCase() : stop.stopDesc.toLowerCase()
             return stopName.includes(search)
         })
 
-
     return <>
-        <Segment.Group>
-            <Responsive maxWidth={600}>
-                <StopList
-                    stops={list}
-                    activeIndex={activeIndex}
-                    manageActive={manageActive} />
-            </Responsive>
-            <Responsive minWidth={601}>
-                <Ref innerRef={contextRef}>
-                    <Grid columns={2}>
-                        <Grid.Column>
-                            <StopList
+        <Responsive maxWidth={550}>
+            <StopList
+                stops={list}
+                activeIndex={activeIndex}
+                manageActive={manageActive} />
+            {activeIndex && <Stop stopId={activeIndex} reset={resetActiveIndex} />}
+        </Responsive>
+        <Responsive minWidth={551} >
+            <Ref innerRef={contextRef}>
+                <Grid columns={2} >
+                    <Grid.Column>
+                        <StopList
+                            stops={list}
+                            activeIndex={activeIndex}
+                            manageActive={manageActive} />
+                        {activeIndex && <Stop stopId={activeIndex} reset={resetActiveIndex} />}
+                    </Grid.Column>
+                    <Grid.Column>
+                        <Sticky context={contextRef}>
+                            <StopMap
                                 stops={list}
+                                center={center}
                                 activeIndex={activeIndex}
                                 manageActive={manageActive} />
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Sticky context={contextRef}>
-                                <StopMap
-                                    stops={list}
-                                    center={center}
-                                    activeIndex={activeIndex}
-                                    manageActive={manageActive} />
-                            </Sticky>
-                        </Grid.Column>
-                    </Grid>
-                </Ref>
-            </Responsive>
-            <Filter
-                search={handleSearch}
-                handleOperator={handleOperator}
-                operator={operators}
-                name={search}
-                location={handleLocation} />
-        </Segment.Group>
+                        </Sticky>
+                    </Grid.Column>
+
+                </Grid>
+            </Ref>
+        </Responsive>
+        <Filter
+            search={handleSearch}
+            handleOperator={handleOperator}
+            operator={operators}
+            name={search}
+            location={handleLocation} />
     </>
 }
 export default Content

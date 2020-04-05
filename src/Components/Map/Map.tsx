@@ -58,7 +58,7 @@ const StopMap: Function = ({ stops, center, manageActive, activeIndex }: any): J
                         manageActive(stop)
                     }}
 
-                    icon={stop.stopId === activeIndex
+                    icon={activeIndex && stop.stopId === activeIndex
                         ? iconActive
                         : stop.operator === 'zkm' ? iconGdy : iconGdn}
                 />
