@@ -6,7 +6,7 @@ import { StopList } from './List/List'
 import StopMap from './Map/Map'
 import { Filter } from './List/Filter/Filter'
 import { locationSorter } from './List/sorter'
-import { fetchLists } from './List/fetchList'
+import { fetchLists, stopInTrips, lines } from './List/fetchList'
 import { Stop } from './Stop/Stop'
 
 const swrOptions = {
@@ -15,7 +15,8 @@ const swrOptions = {
 
 const Content: Function = (): JSX.Element[] | JSX.Element => {
     const contextRef = createRef()
-    const { data, error } = useSWR(" ", fetchLists, swrOptions)
+    const { data: stops, error } = useSWR(" ", fetchLists, swrOptions)
+    const { data: stopTrips } = useSWR("stopInTrips", stopInTrips, swrOptions)
     const [search, setSearch] = useState<string>('')
     const [operators, setOperators] = useState<string>('all')
     const [location, setLocation] = useState<[number, number] | null>(null)
@@ -47,7 +48,7 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
 
     const distFrom = require('distance-from')
 
-    const list = data && data
+    const list = stops && stops
         .map((stop: any) => {
             stop.distance = location && Math.round(distFrom(location).to([stop.stopLat, stop.stopLon]).in('m'))
             stop.operator = stop.stopId < 30000 ? 'ztm' : 'zkm'
@@ -69,6 +70,7 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
         <Responsive maxWidth={550}>
             <StopList
                 stops={list}
+                lines={stopTrips}
                 activeIndex={activeIndex}
                 manageActive={manageActive} />
             {activeIndex && <Stop stopId={activeIndex} reset={resetActiveIndex} />}
@@ -79,6 +81,7 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
                     <Grid.Column>
                         <StopList
                             stops={list}
+                            lines={stopTrips}
                             activeIndex={activeIndex}
                             manageActive={manageActive} />
                         {activeIndex && <Stop stopId={activeIndex} reset={resetActiveIndex} />}

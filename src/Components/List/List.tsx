@@ -1,8 +1,16 @@
 import React from 'react'
 import { List, Dimmer, Loader } from 'semantic-ui-react'
-import ListElement from './ListElement'
+// import useSWR from 'swr'
 
-const StopList = ({ stops, manageActive, activeIndex }: any) => {
+import ListElement from './ListElement'
+// import { stopInTrips } from './fetchList'
+
+const swrOptions = {
+    revalidateOnFocus: false
+}
+
+const StopList = ({ stops, manageActive, activeIndex, lines }: any) => {
+
 
     const refs = stops && stops.reduce((acc: any, value: any) => {
         acc[value.stopId] = React.createRef();
@@ -13,6 +21,7 @@ const StopList = ({ stops, manageActive, activeIndex }: any) => {
         stops.map((stop: any) =>
             <List.Item key={stop.stopId} className={activeIndex === stop.stopId ? 'main-list__item--active' : 'main-list__item'}>
                 <ListElement
+                    lines={lines ? lines[stop.stopId] : null}
                     ref={refs[stop.stopId]}
                     stop={stop}
                     activeIndex={activeIndex}

@@ -3,7 +3,7 @@ import { fetchGdanskStop } from './gdanskFetcher';
 import { fetchGdyniaStop } from './gdyniaFetcher';
 import { GdyniaStop } from './GdyniaStop';
 import { Placeholder, Button } from 'semantic-ui-react';
-import {stopInTrips} from './../List/fetchList'
+import { lines } from '../List/fetchList';
 
 
 interface HtmlTable {
@@ -17,7 +17,7 @@ export const Stop: Function = ({ stopId, reset }: any): JSX.Element[] | JSX.Elem
     const [error, setError] = useState(null)
 
     useEffect(() => {
-        stopInTrips()
+        // lines()
         if (stopId < 30000) {
             getGdansk(stopId)
         }
