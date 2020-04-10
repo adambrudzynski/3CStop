@@ -92,6 +92,29 @@ export const lines = async () => {
         return { [stop[0]]: modifiedStop }
     })
     console.log(result);
+}
 
-
+export  const lineNames = (line: number) => {
+    if (line === 10603) {
+        return 'K'
+    } else if (line === 10605) {
+        return 'R'
+    } else if (line === 10606) {
+        return 'S'
+    } else if (line === 10609) {
+        return 'Z'
+    } else if (line === 10602) {
+        return 'J'
+    } else if (line >= 10000 && line < 10500 && line > 10399) {
+        return `N${line - 10000 - 400}`
+    } else if (line < 500 && line > 399) {
+        return `N${line - 400}`
+    }
+    else if (line >= 10000) {
+        return line - 10000
+    }
+    else if (line < 900 && line > 799) {
+        return `T${line - 800}`
+    }
+    return line
 }

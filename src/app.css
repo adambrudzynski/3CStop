@@ -28,12 +28,17 @@ body {
 
 .stop {
     padding-bottom: 30px !important;
+    min-width: 282px;
 }
 
-.main-list__item {}
+
+.main-list__item {
+    padding: 2px 5px 2px 5px;
+}
 
 .main-list__item--active {
     background-color: rgb(136, 200, 202);
+    padding: 2px 5px 2px 5px;
 }
 
 .leaflet-container {

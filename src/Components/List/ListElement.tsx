@@ -1,61 +1,27 @@
-import React, { forwardRef, useEffect } from 'react'
-import { List, Label } from 'semantic-ui-react'
+import React from 'react'
+import { Label } from 'semantic-ui-react'
+import { ListChildComponentProps } from 'react-window'
+import { lineNames } from './fetchList';
 
 
-const ListElement = ({ stop, activeIndex, manageActive, lines }: any, ref: any) => {
-    useEffect(() => {
-        if (activeIndex === stop.stopId) {
-            ref.current.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center',
-            });
-        }
-    }, [activeIndex, stop.stopId, ref, lines])
-
-    const handleClick = () => {
-        manageActive(stop)
-        console.log(stop)
-    }
-
-    const lineNames = (line: number) => {
-        if (line === 10603) {
-            return 'K'
-        } else if (line === 10605) {
-            return 'R'
-        } else if (line === 10606) {
-            return 'S'
-        } else if (line === 10609) {
-            return 'Z'
-        } else if (line === 10602) {
-            return 'J'
-        } else if (line >= 10000 && line < 10500 && line > 10399) {
-            return `N${line - 10000 - 400}`
-        } else if (line < 500 && line > 399) {
-            return `N${line - 400}`
-        }
-        else if (line >= 10000) {
-            return line - 10000
-        }
-        else if (line < 900 && line > 799) {
-            return `T${line - 800}`
-        }
-        return line
-    }
-
-    return <div ref={ref} key={stop.stopId} >
-        <List.Content onClick={handleClick}>
-            <List.Header>
-                <Label size='tiny' color={stop.operator === 'ztm' ? 'red' : 'blue'} content={stop.operator.toUpperCase()} />
-                {stop.stopName || stop.stopDesc}
-                {stop.stopCode && <Label circular size='tiny' content={stop.stopCode} />}
-                {stop.distance && <Label circular color='olive' size='tiny' content={`${stop.distance >= 1000 ? (Math.round(stop.distance / 100)) / 10 + 'km' : stop.distance + 'm'}`} />}
-            </List.Header>
-            <List.Description>
-                Linie: {lines && lines.map((line: any) => <Label key={line} circular size='tiny' content={lineNames(line)} />)}
-            </List.Description>
-        </List.Content>
+const ListElement = ({ index, style, data }: ListChildComponentProps) => {
+    return <div key={data.stops[index].stopId}
+        className={data.stops[index].stopId === data.activeIndex ? 'main-list__item--active' : 'main-list__item'}
+        style={{
+            overflow: 'hidden',
+            borderBottom: '1px solid lightgrey',
+            ...style
+        }}
+        onClick={() => data.manageActive(data.stops[index])}
+    >
+        <Label size='tiny' color={data.stops[index].operator === 'ztm' ? 'red' : 'blue'} content={data.stops[index].operator.toUpperCase()} />
+        {data.stops[index].stopName + ' ' || data.stops[index].stopDesc + ' '}
+        {data.stops[index].stopCode && data.stops[index].stopCode}
+        {/* {data.stops[index].distance && <Label circular color='olive' size='tiny' content={`${data.stops[index].distance >= 1000 ? (Math.round(data.stops[index].distance / 100)) / 10 + 'km' : data.stops[index].distance + 'm'}`} />} */}
+        {data.lines && data.lines[data.stops[index].stopId]
+            ? <> {data.lines[data.stops[index].stopId].map((line: any) => <Label key={line} circular size='tiny' content={lineNames(line)} />)} </>
+            : null}
     </div>
 
-
 }
-export default forwardRef(ListElement)
+export default ListElement

@@ -17,7 +17,6 @@ export const Stop: Function = ({ stopId, reset }: any): JSX.Element[] | JSX.Elem
     const [error, setError] = useState(null)
 
     useEffect(() => {
-        // lines()
         if (stopId < 30000) {
             getGdansk(stopId)
         }
@@ -50,7 +49,8 @@ export const Stop: Function = ({ stopId, reset }: any): JSX.Element[] | JSX.Elem
             <Placeholder.Line />
         </Placeholder>
 
-        : <div className='stop'> <Button floated='right' icon='cancel' circular onClick={reset} />
+        : <div className='stop'>
+            {reset && <Button floated='right' icon='cancel' circular onClick={reset} />}
             {stopId < 30000
                 ? <div dangerouslySetInnerHTML={table}></div>
                 : <GdyniaStop stopid={stopId} stop={gdyniaStop} />}

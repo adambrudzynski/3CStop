@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Map, Marker, Popup, TileLayer, AttributionControl } from "react-leaflet";
 import { Icon } from "leaflet";
 import { locationSorter } from "../List/sorter";
+import { Stop } from "../Stop/Stop";
 
-const StopMap: Function = ({ stops, center, manageActive, activeIndex }: any): JSX.Element[] | JSX.Element => {
+const StopMap: Function = ({ stops, center, manageActive, activeIndex, resetActiveIndex }: any): JSX.Element[] | JSX.Element => {
 
     const [currCenter, setCurrCenter] = useState(center)
 
@@ -63,6 +64,16 @@ const StopMap: Function = ({ stops, center, manageActive, activeIndex }: any): J
                         : stop.operator === 'zkm' ? iconGdy : iconGdn}
                 />
             ))}
+            {activeIndex && (
+                <Popup
+                    position={center}
+                    onClose={() => {
+                        resetActiveIndex();
+                    }}
+                >
+                    <Stop stopId={activeIndex} />
+                </Popup>
+            )}
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

@@ -1,33 +1,14 @@
-import React from 'react'
-import { List, Dimmer, Loader } from 'semantic-ui-react'
-// import useSWR from 'swr'
-
+import React, { useState } from 'react'
+import { Dimmer, Loader, Visibility } from 'semantic-ui-react'
+import { FixedSizeList as List } from 'react-window';
 import ListElement from './ListElement'
-// import { stopInTrips } from './fetchList'
-
-const swrOptions = {
-    revalidateOnFocus: false
-}
-
-const StopList = ({ stops, manageActive, activeIndex, lines }: any) => {
 
 
-    const refs = stops && stops.reduce((acc: any, value: any) => {
-        acc[value.stopId] = React.createRef();
-        return acc;
-    }, {});
+const StopList = (props: any) => {
+    const { stops, manageActive, activeIndex, lines, height }: any = props
+    const [visibility, setVisibility] = useState<any>(350)
 
-    const list = stops ?
-        stops.map((stop: any) =>
-            <List.Item key={stop.stopId} className={activeIndex === stop.stopId ? 'main-list__item--active' : 'main-list__item'}>
-                <ListElement
-                    lines={lines ? lines[stop.stopId] : null}
-                    ref={refs[stop.stopId]}
-                    stop={stop}
-                    activeIndex={activeIndex}
-                    manageActive={manageActive} />
-            </List.Item>)
-        : null
+    const handleUpdate = (e: any, { calculations }: any): void => setVisibility(calculations)
 
     if (!stops) {
         return <Dimmer active inverted>
@@ -35,9 +16,22 @@ const StopList = ({ stops, manageActive, activeIndex, lines }: any) => {
         </Dimmer>
 
     }
-    return <List className={activeIndex ? 'main-list--short' : 'main-list'} divided verticalAlign='middle'>
-        {list}
-    </List>
+    return <Visibility onOnScreen={handleUpdate} onUpdate={handleUpdate}>
+        <List
+            height={height || 850}
+            itemCount={stops.length}
+            itemSize={50}
+            width={visibility.width}
+            itemData={{
+                stops,
+                manageActive,
+                lines,
+                activeIndex
+            }}
+        >
+            {ListElement}
+        </List>
+    </Visibility>
 
 }
 
