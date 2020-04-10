@@ -9,10 +9,16 @@ import { lines } from '../List/fetchList';
 interface HtmlTable {
     __html: string
 }
+interface Delay {
+    shortName?: string,
+    headSign?: string,
+    delayDesc?: string,
+    message?: string
+}
 
 export const Stop: Function = ({ stopId, reset }: any): JSX.Element[] | JSX.Element => {
     const [table, setTable] = useState<HtmlTable | undefined>();
-    const [gdyniaStop, setGdyniaStop] = useState(null)
+    const [gdyniaStop, setGdyniaStop] = useState<null | Array<Delay> | Delay>(null)
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null)
 
@@ -27,9 +33,7 @@ export const Stop: Function = ({ stopId, reset }: any): JSX.Element[] | JSX.Elem
     const getGdansk = async (id: number) => {
         setLoading(true)
         const stop = await fetchGdanskStop(id)
-        setTable({
-            __html: stop
-        })
+        setGdyniaStop(stop)
         setLoading(false)
     }
 
@@ -51,8 +55,6 @@ export const Stop: Function = ({ stopId, reset }: any): JSX.Element[] | JSX.Elem
 
         : <div className='stop'>
             {reset && <Button floated='right' icon='cancel' circular onClick={reset} />}
-            {stopId < 30000
-                ? <div dangerouslySetInnerHTML={table}></div>
-                : <GdyniaStop stopid={stopId} stop={gdyniaStop} />}
+            <GdyniaStop stopid={stopId} stop={gdyniaStop} />
         </div>
 }
