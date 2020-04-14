@@ -3,12 +3,7 @@ import { fetchGdanskStop } from './gdanskFetcher';
 import { fetchGdyniaStop } from './gdyniaFetcher';
 import { GdyniaStop } from './GdyniaStop';
 import { Placeholder, Button } from 'semantic-ui-react';
-import { lines } from '../List/fetchList';
 
-
-interface HtmlTable {
-    __html: string
-}
 interface Delay {
     shortName?: string,
     headSign?: string,
@@ -16,12 +11,9 @@ interface Delay {
     message?: string
 }
 
-export const Stop: Function = ({ stopId, reset }: any): JSX.Element[] | JSX.Element => {
-    const [table, setTable] = useState<HtmlTable | undefined>();
+export const Stop: Function = ({ stopId, reset }: any): JSX.Element[] | JSX.Element | null => {
     const [gdyniaStop, setGdyniaStop] = useState<null | Array<Delay> | Delay>(null)
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null)
-
     useEffect(() => {
         if (stopId < 30000) {
             getGdansk(stopId)
@@ -43,6 +35,7 @@ export const Stop: Function = ({ stopId, reset }: any): JSX.Element[] | JSX.Elem
         setGdyniaStop(stop)
         setLoading(false)
     }
+    if (!stopId) return null
 
     return loading ?
         <Placeholder>

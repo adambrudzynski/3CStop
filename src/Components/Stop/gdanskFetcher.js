@@ -24,8 +24,8 @@ export const fetchGdanskStop = (id) => {
                                 delayDesc: elements[2].includes('&nbsp') ? '>>>' : elements[2]
                             }
                         })
-                        console.log('HTML', decoded)
-                        console.log('result', result);
+                        // console.log('HTML', decoded)
+                        // console.log('result', result);
 
                         return result
                     }
@@ -33,9 +33,3 @@ export const fetchGdanskStop = (id) => {
                 })
         })
 }
-
-// <!-- p --><div style="background: #fff; margin-top: 1em; margin-bottom: 1em;"><table class="sip">
-// <tr><th class="naglowek">Linia</th><th class="naglowek" style="min-width:200px;">Kierunek</th><th class="naglowek">Odjazd</th></tr>
-// <tr><td>171</td><td>Oliwa Pętla Tramwajowa</td><td>17:47</td></tr>
-// <tr><td>171</td><td>Oliwa Pętla Tramwajowa</td><td>18:15</td></tr>
-// </table><p style="font-size: 8pt; font-style:italic;margin-top: 0;text-align:center;">ďż˝rďż˝dďż˝o danych: narzďż˝dzie oprogramowania SIP opracowane przez <a href="http://www.gmv.com">GMV</a></p>

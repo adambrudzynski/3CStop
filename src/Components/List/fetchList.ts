@@ -15,8 +15,6 @@ export const fetchLists = async () => {
 
         return axios.all([fetchGdansk(), fetchGdynia()])
             .then(axios.spread(function (gdn: any, gdy: any) {
-                console.log('gdansk', gdn.data.stops);
-                console.log('gdynia', gdy.data);
                 return gdn.data.stops.concat(gdy.data)
             }));
     }
@@ -94,7 +92,7 @@ export const lines = async () => {
     console.log(result);
 }
 
-export  const lineNames = (line: number) => {
+export const lineNames = (line: number) => {
     if (line === 10603) {
         return 'K'
     } else if (line === 10605) {
