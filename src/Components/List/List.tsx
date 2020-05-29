@@ -5,7 +5,7 @@ import ListElement from './ListElement'
 
 
 const StopList = (props: any) => {
-    const { stops, manageActive, activeIndex, lines, height }: any = props
+    const { stops, manageActive, activeIndex, lines, height, favourite  }: any = props
     const [visibility, setVisibility] = useState<any>(350)
 
     const handleUpdate = (e: any, { calculations }: any): void => setVisibility(calculations)
@@ -23,6 +23,7 @@ const StopList = (props: any) => {
             itemSize={50}
             width={visibility.width}
             itemData={{
+                favourite,
                 stops,
                 manageActive,
                 lines,

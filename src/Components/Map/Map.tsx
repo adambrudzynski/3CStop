@@ -10,7 +10,10 @@ const StopMap: Function = ({ stops, center, manageActive, activeIndex, resetActi
 
     const handleMoveend = (e: any) => {
         const current = e.target.getCenter()
-        setCurrCenter([current.lat, current.lng])
+        setTimeout(() => {
+            setCurrCenter([current.lat, current.lng])
+        }, 350);
+
     }
 
     const distFrom = require('distance-from')

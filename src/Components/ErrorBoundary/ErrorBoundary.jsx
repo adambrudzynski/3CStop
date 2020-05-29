@@ -3,38 +3,47 @@ import log from 'loglevel';
 import remote from 'loglevel-plugin-remote';
 
 const customJSON = log => ({
-msg: log.message,
-level: log.level.label,
-stacktrace: log.stacktrace
+    msg: log.message,
+    level: log.level.label,
+    stacktrace: log.stacktrace
 });
 
-remote.apply(log, { format: customJSON, url: 'https://cstop-eb35a.firebaseio.com/error/build' });
+remote.apply(log, { format: customJSON, url: 'https://cstop-eb35a.firebaseio.com/error/build.json' });
 log.enableAll();
 
 class ErrorBoundary extends Component {
- constructor(props) {
-  super(props);
-  this.state = { hasError: false };
-}
+    constructor(props) {
+        super(props);
+        this.state = {
+            hasError: false,
+            error: '',
+            info: ''
+        };
+    }
 
-static getDerivedStateFromError(error) {
-  // Update state so the next render will show the fallback UI.
-  return { hasError: true };
-}
+    static getDerivedStateFromError(error) {
+        // Update state so the next render will show the fallback UI.
+        return { hasError: true };
+    }
 
-componentDidCatch(error, info) {
-  // log the error to our server with loglevel
-  log.error({ error, info });
-}
+    componentDidCatch(error, info) {
+        // log the error to our server with loglevel
+        this.setState({ error })
+        this.setState({ info })
+        log.error({ error, info });
+    }
 
-render() {
- if (this.state.hasError) {
-  // You can render any custom fallback UI
-  return <h1>Something went wrong.</h1>;
- }
+    render() {
+        if (this.state.hasError) {
+            // You can render any custom fallback UI
+            return <div><h1>Something went wrong.</h1>
+           Error: {JSON.stringify(this.state.error, null, '\t')}
+           Info: {JSON.stringify(this.state.info, null, '\t')}
+            </div>
+        }
 
- return this.props.children;
-}
+        return this.props.children;
+    }
 }
 
 export default ErrorBoundary;

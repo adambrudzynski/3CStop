@@ -1,10 +1,10 @@
 import React from 'react'
-import { Label } from 'semantic-ui-react'
+import { Label, Icon, Button } from 'semantic-ui-react'
 import { ListChildComponentProps } from 'react-window'
 import { lineNames } from './fetchList';
 
 
-const ListElement = ({ index, style, data }: ListChildComponentProps) => {
+const ListElement = ({ index, style, data, favourite }: ListChildComponentProps) => {
     return <div key={data.stops[index].stopId}
         className={data.stops[index].stopId === data.activeIndex ? 'main-list__item--active' : 'main-list__item'}
         style={{
@@ -21,6 +21,7 @@ const ListElement = ({ index, style, data }: ListChildComponentProps) => {
         {data.lines && data.lines[data.stops[index].stopId]
             ? <> {data.lines[data.stops[index].stopId].map((line: any) => <Label key={line} circular size='tiny' content={lineNames(line)} />)} </>
             : null}
+        <Button floated="right" icon='heart' circular onClick={() => favourite(data.stops[index].stopId)} />
     </div>
 
 }

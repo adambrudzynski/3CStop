@@ -1,6 +1,7 @@
 import React, { createRef, useState, useEffect } from 'react'
 import useSWR from 'swr'
 import { Grid, Ref, Sticky, Responsive } from 'semantic-ui-react'
+import useLocalStorageState from 'use-local-storage-state'
 
 import { StopList } from './List/List'
 import StopMap from './Map/Map'
@@ -24,6 +25,7 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
     const [center, setCenter] = useState<[number | string | undefined, number | string | undefined]>([process.env.REACT_APP_DEFAULT_LOC_CENTER_LAT, process.env.REACT_APP_DEFAULT_LOC_CENTER_LON])
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
     const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+    const [favs, setFavs] = useLocalStorageState('fav', [])
 
     useEffect(() => {
         function handleResize() {
@@ -56,6 +58,10 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
         setActiveIndex(null)
     }
 
+    const favourite = (fav: any) => {
+        setFavs([...favs, fav])
+    }
+
     const distFrom = require('distance-from')
 
     const list = stops && stops
@@ -77,41 +83,44 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
         })
 
     return <>
-            <Responsive maxWidth={550}>
-                <StopList
+        <Responsive maxWidth={550}>
+            {activeIndex
+                ? <Stop stopId={activeIndex} reset={resetActiveIndex} />
+                : <StopList
+                favourite = {favourite}
                     height={windowDimensions.height - 40}
                     stops={list}
                     lines={stopTrips}
                     activeIndex={activeIndex}
-                    manageActive={manageActive} />
-                <Stop stopId={activeIndex} reset={resetActiveIndex} />
-            </Responsive>
-            <Responsive minWidth={551} >
-                <Ref innerRef={contextRef}>
-                    <Grid columns={2} >
-                        <Grid.Column>
-                            <StopList
-                                height={windowDimensions.height - 40}
+                    manageActive={manageActive} />}
+        </Responsive>
+        <Responsive minWidth={551} >
+            <Ref innerRef={contextRef}>
+                <Grid columns={2} >
+                    <Grid.Column>
+                        <StopList
+                        favourite = {favourite}
+                            height={windowDimensions.height - 40}
+                            stops={list}
+                            lines={stopTrips}
+                            activeIndex={activeIndex}
+                            manageActive={manageActive} />
+
+                    </Grid.Column>
+                    <Grid.Column>
+                        <Sticky context={contextRef}>
+                            <StopMap
                                 stops={list}
-                                lines={stopTrips}
+                                center={center}
                                 activeIndex={activeIndex}
-                                manageActive={manageActive} />
+                                manageActive={manageActive}
+                                resetActiveIndex={resetActiveIndex} />
+                        </Sticky>
+                    </Grid.Column>
 
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Sticky context={contextRef}>
-                                <StopMap
-                                    stops={list}
-                                    center={center}
-                                    activeIndex={activeIndex}
-                                    manageActive={manageActive}
-                                    resetActiveIndex={resetActiveIndex} />
-                            </Sticky>
-                        </Grid.Column>
-
-                    </Grid>
-                </Ref>
-            </Responsive>
+                </Grid>
+            </Ref>
+        </Responsive>
         <Filter
             search={handleSearch}
             handleOperator={handleOperator}
