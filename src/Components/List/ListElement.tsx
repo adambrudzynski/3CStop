@@ -4,7 +4,7 @@ import { ListChildComponentProps } from 'react-window'
 import { lineNames } from './fetchList';
 
 
-const ListElement = ({ index, style, data, favourite }: ListChildComponentProps) => {
+const ListElement = ({ index, style, data }: ListChildComponentProps) => {
     return <div key={data.stops[index].stopId}
         className={data.stops[index].stopId === data.activeIndex ? 'main-list__item--active' : 'main-list__item'}
         style={{
@@ -21,7 +21,7 @@ const ListElement = ({ index, style, data, favourite }: ListChildComponentProps)
         {data.lines && data.lines[data.stops[index].stopId]
             ? <> {data.lines[data.stops[index].stopId].map((line: any) => <Label key={line} circular size='tiny' content={lineNames(line)} />)} </>
             : null}
-        <Button floated="right" icon='heart' circular onClick={() => favourite(data.stops[index].stopId)} />
+        <Button basic floated="right" icon='heart' color={data.stops[index].fav && 'red'} circular onClick={() => data.favourite(data.stops[index].stopId)} />
     </div>
 
 }

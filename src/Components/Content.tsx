@@ -14,18 +14,22 @@ import { getWindowDimensions } from '../utils/hooks'
 const swrOptions = {
     revalidateOnFocus: false
 }
+type Filter = {
+    operators: string;
+    search: string;
+    favs: boolean
+}
 
 const Content: Function = (): JSX.Element[] | JSX.Element => {
     const contextRef = createRef()
     const { data: stops } = useSWR(" ", fetchLists, swrOptions)
     const { data: stopTrips } = useSWR("stopInTrips", stopInTrips, swrOptions)
-    const [search, setSearch] = useState<string>('')
-    const [operators, setOperators] = useState<string>('all')
+    const [filters, setFilters] = useState<Filter>({ operators: 'all', search: "", favs: false })
     const [location, setLocation] = useState<[number, number] | null>(null)
     const [center, setCenter] = useState<[number | string | undefined, number | string | undefined]>([process.env.REACT_APP_DEFAULT_LOC_CENTER_LAT, process.env.REACT_APP_DEFAULT_LOC_CENTER_LON])
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
     const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-    const [favs, setFavs] = useLocalStorageState('fav', [])
+    const [favs, setFavs] = useLocalStorageState<Array<number>>('fav', [])
 
     useEffect(() => {
         function handleResize() {
@@ -36,12 +40,11 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const handleSearch = (search: string) => {
-        setSearch(search)
-    }
-
-    const handleOperator = (operator: string) => {
-        setOperators(operator)
+    const handleFilters = (type: string, vlaue: string | boolean) => {
+        setFilters({
+            ...filters,
+            [type]: vlaue
+        })
     }
 
     const handleLocation = (userLocation: [number, number]) => {
@@ -58,8 +61,14 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
         setActiveIndex(null)
     }
 
-    const favourite = (fav: any) => {
-        setFavs([...favs, fav])
+    const favourite = (fav: number) => {
+        if (favs.includes(fav)) {
+            let list = [...favs]
+            list.splice(list.indexOf(fav), 1)
+            setFavs([...list])
+        } else {
+            setFavs([...favs, fav])
+        }
     }
 
     const distFrom = require('distance-from')
@@ -68,18 +77,20 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
         .map((stop: any) => {
             stop.distance = location && Math.round(distFrom(location).to([stop.stopLat, stop.stopLon]).in('m'))
             stop.operator = stop.stopId < 30000 ? 'ztm' : 'zkm'
+            stop.fav = favs.indexOf(stop.stopId) >= 0 ? true : false
             return stop
         })
         .sort(locationSorter)
+        .filter((stop: any) => filters.favs===true ? stop.fav === filters.favs : stop)
         .filter((stop: any) => {
-            if (operators === 'all') {
+            if (filters.operators === 'all') {
                 return stop
             }
-            return operators === stop.operator
+            return filters.operators === stop.operator
         })
         .filter((stop: any) => {
             const stopName = stop.stopName ? stop.stopName.toLowerCase() : stop.stopDesc.toLowerCase()
-            return stopName.includes(search)
+            return stopName.includes(filters.search)
         })
 
     return <>
@@ -87,7 +98,7 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
             {activeIndex
                 ? <Stop stopId={activeIndex} reset={resetActiveIndex} />
                 : <StopList
-                favourite = {favourite}
+                    favourite={favourite}
                     height={windowDimensions.height - 40}
                     stops={list}
                     lines={stopTrips}
@@ -99,7 +110,7 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
                 <Grid columns={2} >
                     <Grid.Column>
                         <StopList
-                        favourite = {favourite}
+                            favourite={favourite}
                             height={windowDimensions.height - 40}
                             stops={list}
                             lines={stopTrips}
@@ -122,10 +133,8 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
             </Ref>
         </Responsive>
         <Filter
-            search={handleSearch}
-            handleOperator={handleOperator}
-            operator={operators}
-            name={search}
+            filters={filters}
+            handleFilters={handleFilters}
             location={handleLocation} />
     </>
 }
