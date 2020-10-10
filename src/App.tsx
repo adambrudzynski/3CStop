@@ -8,7 +8,7 @@ import ErrorBoundary from './Components/ErrorBoundary/ErrorBoundary';
 const App = () => {
   return (
     <ErrorBoundary >
-      <Content key='list' />
+       <Content key='list' />
     </ErrorBoundary>
   );
 }

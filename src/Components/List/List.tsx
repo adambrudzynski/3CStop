@@ -11,9 +11,8 @@ const StopList = (props: any) => {
     const handleUpdate = (e: any, { calculations }: any): void => setVisibility(calculations)
 
     if (!stops) {
-        return <Dimmer active inverted>
-            <Loader inverted content='Pobieranie listy przystanków' />
-        </Dimmer>
+        return  <div style={{backgroundColor: 'white', width: "100%", height: '100%'}}><Dimmer><Loader active content='Pobieranie listy przystanków' /></Dimmer></div>
+    
 
     }
     return <Visibility onOnScreen={handleUpdate} onUpdate={handleUpdate}>

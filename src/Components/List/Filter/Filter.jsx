@@ -27,7 +27,7 @@ const Filter = ({ location, handleFilters, filters }) => {
         </Menu.Item>
         <Menu.Item fitted >
             <Button
-                color={filters.favs && "red"}
+                color={filters.favs ? "red" : 'grey'}
                 icon='heart'
                 basic
                 onClick={() => handleFilters("favs", !filters.favs)}

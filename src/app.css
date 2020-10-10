@@ -1,46 +1,198 @@
 body {
-    background-color: rgb(240, 240, 240);
+  background-color: rgb(240, 240, 240);
+  max-height: 100vh;
+  height: 98%;
+}
+.app--mobile {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 3;
+  grid-template-areas:
+    'header'
+    'main-list';
+}
+
+.header {
+  padding: 5px;
+  background-color: teal;
+  grid-area: header;
+  width: 100%;
+}
+
+.header span {
+    display: inline-block;
+    margin: 6px;
+    color: lightgray;
+    font-size: 2em;
+}
+
+.info {
+  color: darkgray;
+  font-size: 0.8em;
 }
 
 .ui.form .fields {
-    margin: 0px;
+  margin: 0px;
 }
 
 .ui.menu.fixed {
-    z-index: 900;
+  z-index: 900;
 }
 
 .ui.dropdown .menu {
-    z-index: 900;
+  z-index: 900;
 }
 
 .main-list {
-    padding: 10px 10px 30px 10px !important;
-    height: 100vh;
-    overflow-Y: scroll;
+  grid-area: main-list;
+  background-color: white;
+  padding: 0px;
+  height: calc(100vh - 60px);
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 5px 7px 1px rgba(0, 0, 0, 0.35);
+  scrollbar-color: #c9c9c9 rgba(255, 255, 255, 0.055);
+  scrollbar-width: thin;
 }
 
+.main-list.mobile {
+    height: calc(100vh - 110px)
+}
 .main-list--short {
-    padding: 10px!important;
-    height: 65vh;
-    overflow-Y: scroll;
+  padding: 10px !important;
+  height: 65vh;
+  overflow-y: scroll;
 }
 
 .stop {
-    min-width: 180px;
+  min-width: 180px;
+}
+
+.stop__mobile {
+  transition: max-height 1s ease-in-out;
+  position: absolute;
+  bottom: 40px;
+  padding: 15px 10px;
+  background-color: white;
+  min-width: 180px;
+  width: 100%;
+  max-height: calc(100vh - 60px);
+  -webkit-box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.75);
+  border-radius: 20px 20px 0px 0px;
+  -moz-border-radius: 20px 20px 0px 0px;
+  -webkit-border-radius: 20px 20px 0px 0px;
+  z-index: 401;
+}
+/* 
+.stop__mobile.loading {
+    max-height: 100px;
+    transition: all 1s ease-in-out;
+} */
+.stop__mobile.loaded {
+  max-height: 100vh;
+  transition: all 1s ease-in-out;
+}
+
+.stop.hidden,
+.stop__mobile.hidden {
+  padding: 0 10px;
+  max-height: 0;
+}
+
+.stop__departure-table {
+  display: block;
+  width: 100%;
+  max-height: calc(100vh - 70px);
+  overflow: auto;
+}
+.stop__departure-table table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #bdbdbd;
+}
+
+.stop__departure-table tbody {
+  width: 100%;
+  min-width: 250px;
+}
+
+.stop__departure-table tbody tr {
+  border-width: 1px;
+  border-color: #bdbdbd;
+  border-style: solid;
+}
+
+.stop__departure-table.ztm thead {
+  background: rgb(170, 0, 0);
+  color: #fff;
+}
+
+.stop__departure-table.zkm thead {
+  background: rgb(2, 135, 212);
+  color: #fff;
+}
+
+.stop__departure-table th,
+.stop__departure-table td {
+  padding: 5px;
+  text-align: left;
+}
+.stop__departure-table tr :nth-child(2) {
+  min-width: 75%;
+}
+.stop__departure-table tr :nth-child(1) {
+  min-width: 10%;
+}
+.stop__departure-table tr :nth-child(3) {
+  min-width: 15%;
+}
+
+.stop__departure-table__row--arriving {
+  background-color: rgb(255, 221, 221);
 }
 
 .main-list__item {
-    padding: 2px 5px 2px 5px;
+  padding: 2px 5px 2px 5px;
 }
 
 .main-list__item--active {
-    background-color: rgb(136, 200, 202);
-    padding: 2px 5px 2px 5px;
+  background-color: rgb(136, 200, 202);
+  padding: 2px 5px 2px 5px;
+}
+
+.main-list__item:hover,
+.main-list__item--active:hover {
+  cursor: pointer;
 }
 
 .leaflet-container {
-    width: 100%;
-    height: 93vh;
-    height: calc(100vh - 40px)
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.layout__column {
+  padding: 0px;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 5px 7px 1px rgba(0, 0, 0, 0.35);
+}
+.layout__column--full-height {
+  padding: 0px;
+  margin: 10px;
+  background-color: white;
+  height: calc(100vh - 60px);
+  border-radius: 10px;
+  box-shadow: 0px 5px 7px 1px rgba(0, 0, 0, 0.35);
+}
+
+.layout__column--half-height {
+  padding: 0px;
+  margin: 10px;
+  background-color: white;
+  height: calc(50vh - 60px);
+  border-radius: 10px;
+  box-shadow: 0px 5px 7px 1px rgba(0, 0, 0, 0.35);
 }

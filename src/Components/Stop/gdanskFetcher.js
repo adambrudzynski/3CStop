@@ -24,9 +24,6 @@ export const fetchGdanskStop = (id) => {
                                 delayDesc: elements[2].includes('&nbsp') ? '>>>' : elements[2]
                             }
                         })
-                        // console.log('HTML', decoded)
-                        // console.log('result', result);
-
                         return result
                     }
                     return {message:'Brak odjazdów z wybranego przystanku'}

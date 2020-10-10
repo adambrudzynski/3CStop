@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Placeholder, Button } from 'semantic-ui-react';
+import React from 'react'
+import { Placeholder, Button, Label } from 'semantic-ui-react';
 import useSWR from 'swr'
 
 import { fetchGdanskStop } from './gdanskFetcher';
@@ -13,6 +13,11 @@ interface Delay {
     message?: string
 }
 
+interface Props {
+    stop: any,
+    reset: void | undefined,
+    mobile?: boolean
+}
 const swrOptions = {
     refreshInterval: 20000
 }
@@ -22,30 +27,35 @@ const getStop = async (stopId: number) => {
     if (stopId < 30000) {
         return await fetchGdanskStop(stopId)
     }
-    else {
+    else if (stopId >= 30000){
         return await fetchGdyniaStop(stopId)
+    }
+    else if (stopId === undefined || stopId === null) {
+        return null
     }
 
 }
 
-export const Stop: Function = ({ stopId, reset }: any): JSX.Element[] | JSX.Element | null => {
-    const { data: oneStop, error } = useSWR(`${stopId}`, () => getStop(stopId), swrOptions)
-   
-    if (!stopId) return null
-    else if (error) return <>Błąd</>
+export const Stop: Function = ({ stop, reset, mobile }: Props): JSX.Element[] | JSX.Element | null => {
 
-    else if (!oneStop) {    
-        return <Placeholder>
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
+
+    const { data: oneStop, error } =  useSWR(`${stop && stop.stopId}`, () => getStop(stop && stop.stopId), swrOptions)
+
+    if (!stop) {
+        return null
+    }
+    return <div className={`stop${mobile ? '__mobile' : ''} ${oneStop ? "loaded" : "loading"}`}>
+        {stop && <>
+            <Label size='tiny' color={stop.operator === 'ztm' ? 'red' : 'blue'} content={stop.operator.toUpperCase()} />
+            {stop.stopName + ' ' || stop.stopDesc + ' '}
+            {stop.stopCode && stop.stopCode}
+        </>}
+        {reset && <Button basic floated='right' icon='cancel' circular onClick={reset} />}
+        {!stop.stopId && null}
+        {error && <>Wystąpił błąd. Spróbuj ponownie</>}
+        {!oneStop ? <Placeholder>
             <Placeholder.Line />
         </Placeholder>
-    }
-
-    return <div className='stop'>
-        {reset && <Button floated='right' icon='cancel' circular onClick={reset} />}
-        <GdyniaStop stopid={stopId} stop={oneStop} />
+            : <GdyniaStop stopid={stop.stopId} stop={oneStop} operator={stop.operator}/>}
     </div>
 }

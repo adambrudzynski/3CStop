@@ -21,8 +21,17 @@ const ListElement = ({index, style, data}: ListChildComponentProps) => {
         borderBottom: '1px solid lightgrey',
         ...styles,
       }}
-      onClick={() => data.manageActive(data.stops[index])}
+
     >
+      <Button
+        basic
+        floated="right"
+        icon="heart"
+        color={data.stops[index].fav ? 'red' : 'grey'}
+        circular
+        onClick={() => data.favourite(data.stops[index].stopId)}
+      />
+      <div style={{height: '100%'}} onClick={() => data.manageActive(data.stops[index])}>
       <Label
         size="tiny"
         color={data.stops[index].operator === 'ztm' ? 'red' : 'blue'}
@@ -35,14 +44,7 @@ const ListElement = ({index, style, data}: ListChildComponentProps) => {
             <Label key={line} circular size="tiny" content={lineNames(line)} />
           ))
         : null}
-      <Button
-        basic
-        floated="right"
-        icon="heart"
-        color={data.stops[index].fav && 'red'}
-        circular
-        onClick={() => data.favourite(data.stops[index].stopId)}
-      />
+      </div>
     </div>
   );
 };
