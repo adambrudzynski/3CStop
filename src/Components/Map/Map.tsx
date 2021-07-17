@@ -40,7 +40,7 @@ const StopMap: Function = ({
 
 
   const iconActive = new L.Icon({
-    iconUrl: '/3CStop/assets/map-active.svg',
+    iconUrl: '/assets/map-active.svg',
     iconSize: [25, 30],
   });
   const iconGdn = new L.Icon({

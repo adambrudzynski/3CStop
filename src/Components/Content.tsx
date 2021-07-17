@@ -53,8 +53,9 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
     favs: false,
   });
   const [location, setLocation] = useState<[number, number] | null>(null);
-  const [center, setCenter] = useState<[number | string | undefined, number | string | undefined]>(
-      [
+  const [center, setCenter] = useState<
+    [number | string | undefined, number | string | undefined]
+  >([
     process.env.REACT_APP_DEFAULT_LOC_CENTER_LAT,
     process.env.REACT_APP_DEFAULT_LOC_CENTER_LON,
   ]);
@@ -155,7 +156,7 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
                 activeIndex={activeIndex}
                 manageActive={manageActive}
               />
-            ) : ( 
+            ) : (
               <StopMap
                 userLocation={location}
                 mobile
@@ -166,7 +167,6 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
                 manageActive={manageActive}
                 resetActiveIndex={resetActiveIndex}
               />
-             
             )}
           </div>
         </div>
@@ -188,6 +188,7 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
             {/* <div className={`layout__column${activeStop && rows > 1 ? '--half-height' :  '--full-height'}`}  > */}
             <div className={`layout__column--full-height`}>
               <StopMap
+                userLocation={location}
                 stop={activeStop}
                 stops={list}
                 center={center}
@@ -203,6 +204,7 @@ const Content: Function = (): JSX.Element[] | JSX.Element => {
         </Grid>
       </Responsive>
       <Filter
+        mobile={true}
         filters={filters}
         handleFilters={handleFilters}
         location={handleLocation}

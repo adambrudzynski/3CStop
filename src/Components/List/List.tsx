@@ -19,7 +19,7 @@ const StopList = (props: any) => {
         <List
             height={height || 850}
             itemCount={stops.length}
-            itemSize={50}
+            itemSize={70}
             width={visibility.width}
             itemData={{
                 favourite,

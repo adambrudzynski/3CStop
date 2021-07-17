@@ -2,7 +2,7 @@ import React from 'react'
 import { Input, Dropdown, Icon, Menu, Button } from 'semantic-ui-react'
 import { LocationBtn } from './LocationBtn';
 
-const Filter = ({ location, handleFilters, filters }) => {
+const Filter = ({ location, handleFilters, filters, mobile }) => {
 
     const options = [
         { key: 'ztm', text: 'ZTM Gdańsk', value: 'ztm' },
@@ -12,7 +12,7 @@ const Filter = ({ location, handleFilters, filters }) => {
 
     return <Menu
         borderless
-        fixed='bottom'>
+        fixed={mobile ? 'bottom' : "top"}>
         <Menu.Item fitted >
             <LocationBtn location={location} />
         </Menu.Item>
